@@ -51,9 +51,10 @@
       var classes = this.thead.className.split(' ');
 
       if (this.stick !== true && (offsetTop - (parentOffsetTop + parentScrollTop) < 0) &&
-          (offsetTop + this.tbody.offsetHeight - (parentOffsetTop + parentScrollTop) > 0)) {
+          (offsetTop + this.tbody.offsetHeight - (parentOffsetTop + parentScrollTop) > 0) &&
+          (this.tbody.getBoundingClientRect().bottom > 0)) {
         this.stick = true;
-        this.treshold = offsetTop;
+        this.threshold = offsetTop;
         this.windowScrollY = this.parentIsWindow ? 0 : window.scrollY;
         this.setWidth();
         this.thead.style.left = offsetLeft + 'px';
@@ -72,8 +73,10 @@
       }
 
       if (this.stick === true && (
-                 (this.parentIsWindow && (this.treshold - parentScrollTop > 0)) ||
-                 (parentScrollTop <= 0))) {
+           (this.parentIsWindow && (this.threshold - parentScrollTop > 0)) ||
+           (parentScrollTop <= 0) ||
+           (this.tbody.getBoundingClientRect().bottom < 0)
+         )) {
         this.stick = false;
         this.thead.style.position = 'initial';
         classes.splice(classes.indexOf('lr-sticky-header'), 1);
@@ -153,4 +156,3 @@
     return stickyTable;
   };
 });
-
